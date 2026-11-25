@@ -1,7 +1,7 @@
 data:
-  raw_train: data/train.csv
-  raw_later: data/later.csv
-  raw_holdout: data/holdout_features.csv
+  raw_train: data/raw/train.csv
+  raw_later: data/raw/later.csv
+  raw_holdout: data/raw/holdout_features.csv
   clean_train: data/processed/train_clean.csv
 target: resale_thousand_rs
 leak_columns: [final_price_from_rc_transfer]
