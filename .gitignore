@@ -15,4 +15,4 @@ venv/
 # Temporary files
 *.log
 .ipynb_checkpoints/
-/data
+/data/processed/
