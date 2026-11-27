@@ -1,0 +1,11 @@
+{
+  "mae_v1_on_check": 14.43985540315869,
+  "mae_v2_on_check": 12.266336460646908,
+  "improvement_pct": 15.052220966397828,
+  "decision": "promote",
+  "registered_model_name": "mp016-resale-model",
+  "champion_version": "1",
+  "n_train": 1000,
+  "n_first70": 210,
+  "n_last30": 90
+}
