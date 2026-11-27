@@ -1,0 +1,14 @@
+data:
+  raw_train: data/raw/train.csv
+  raw_later: data/raw/later.csv
+  raw_holdout: data/raw/holdout_features.csv
+  clean_train: data/processed/train_clean.csv
+target: resale_thousand_rs
+leak_columns: [final_price_from_rc_transfer]
+numeric_features: [age_years, km_driven, engine_cc, owners, service_records, accidents]
+categorical_features: [brand_tier, city_zone]
+group_column: city_zone
+checks:
+  sentinel_candidates: [-999, -99, -1, 999, 9999]
+  stuck_min_run_days: 7
+  typo_factor: 10
