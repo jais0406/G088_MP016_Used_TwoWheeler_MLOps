@@ -16,3 +16,6 @@ venv/
 *.log
 .ipynb_checkpoints/
 /data/processed/
+
+mlflow.db
+mlruns/
