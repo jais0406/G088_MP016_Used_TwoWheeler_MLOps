@@ -1,0 +1,5 @@
+{
+  "run_id": "112d44c4790445d99875ebe07de44e0b",
+  "model_name": "Ridge",
+  "cv_mae": 5.168536420338138
+}
