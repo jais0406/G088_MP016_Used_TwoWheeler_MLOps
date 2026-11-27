@@ -1,0 +1,40 @@
+# Version control and tooling
+.git
+.gitignore
+.github
+.dvc
+.dvcignore
+**/*.dvc
+
+# Python caches and environments
+**/__pycache__
+**/*.py[cod]
+.venv
+venv
+.pytest_cache
+
+# Data, experiments and outputs - the image only needs app/ and the model
+data
+mlflow.db
+mlruns
+mlartifacts
+predictions
+models/model_v1.joblib
+
+# Not needed at runtime
+tests
+src
+k8s
+reports
+*.md
+findings.yaml
+params.yaml
+pytest.ini
+Dockerfile
+.dockerignore
+
+# OS and editor files
+.DS_Store
+.vscode
+.idea
+*.log
