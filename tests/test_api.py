@@ -71,7 +71,9 @@ def test_predict_without_model_returns_503(valid_bike, monkeypatch):
     monkeypatch.setattr("app.main.load_model", lambda *a, **k: None)
     app.state.model = None
     with TestClient(app) as c:
-        assert c.get("/health").json() == {"status": "ok", "model_loaded": False}
+        health = c.get("/health").json()
+        assert health["status"] == "ok"
+        assert health["model_loaded"] is False
         assert c.post("/predict", json=valid_bike).status_code == 503
 
 
@@ -92,3 +94,48 @@ def test_prediction_is_logged_as_json(client, valid_bike):
     assert len(pred) == 1
     assert pred[0]["prediction"] == pytest.approx(42.5)
     assert pred[0]["level"] == "INFO"
+
+
+def _capture_logs(action):
+    """Run action() and return the JSON lines the service logger wrote."""
+    stream = io.StringIO()
+    handler = logging.StreamHandler(stream)
+    handler.setFormatter(JsonFormatter())
+    logger = get_logger()
+    logger.addHandler(handler)
+    try:
+        action()
+    finally:
+        logger.removeHandler(handler)
+    return [json.loads(line) for line in stream.getvalue().splitlines() if line.strip()]
+
+
+def test_rejected_request_is_logged_without_values(client, valid_bike):
+    valid_bike["age_years"] = 99
+    responses = []
+    records = _capture_logs(lambda: responses.append(client.post("/predict", json=valid_bike)))
+
+    assert responses[0].status_code == 422
+    rejected = [r for r in records if r.get("event") == "rejected"]
+    assert len(rejected) == 1
+    # Only the field name and error type are logged, not the value sent.
+    assert rejected[0]["errors"] == [{"field": "age_years", "type": "less_than_equal"}]
+
+
+class BrokenModel:
+    def predict(self, X):
+        raise ValueError("boom")
+
+
+def test_model_error_returns_500_and_is_logged(valid_bike):
+    app.state.model = BrokenModel()
+    try:
+        with TestClient(app) as c:
+            responses = []
+            records = _capture_logs(lambda: responses.append(c.post("/predict", json=valid_bike)))
+    finally:
+        app.state.model = None
+
+    assert responses[0].status_code == 500
+    assert responses[0].json()["detail"] == "Prediction failed"
+    assert any(r.get("event") == "prediction_error" for r in records)
