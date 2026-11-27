@@ -40,8 +40,8 @@ data_issues:
 tracking:
   experiment_name: "mp016-resale"
   best_run_id: "112d44c4790445d99875ebe07de44e0b"        # the MLflow run id of your v1 model
-  registered_model_name: null
-  champion_version: null
+  registered_model_name: "mp016-resale-model"
+  champion_version: "1"
 
 monitoring:
   psi:                     # cleaned train.csv vs later.csv, 10 bins
@@ -57,6 +57,6 @@ monitoring:
     'South': null
     'Central': null
   worst_served_group: null
-  mae_v1_on_check: null    # v1 on the last 30% of later.csv (by date)
-  mae_v2_on_check: null    # v2 on the same rows
-  decision: null           # promote or keep
+  mae_v1_on_check: 14.4399    # v1 on the last 30% of later.csv (by date)
+  mae_v2_on_check: 12.2663    # v2 on the same rows
+  decision: "promote"           # promote or keep
